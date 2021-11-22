@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div id="container">
+        <div id="input-container" >
+            <label for="adjacency-list" id="label" >Lista de adjacencias:</label>
+            <textarea id="adjacency-list" placeholder="Digite aqui a lista de adjacencias..." rows="10" cols="50">
+1 -> 2 -> 3 -> 4 -> .
+2 -> 4 -> .
+3 -> 1 -> 2 -> .
+4 -> .
+            </textarea>
+            <label for="vertexes" id="label" >Lista de adjacencias:</label>
+            <input id="vertexes" type="text" placeholder="Digite aqui um ou dois vértices..." size="50" value="1, 2" />
+            <div id="selection-container">
+                <div>
+                    <input type="checkbox" checked id="adjacency-matrix"/>
+                    <label for="adjacency-matrix">Matriz de Adjacencias</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="alcancability-matrix-power"/>
+                    <label for="alcancability-matrix-power">Matriz de Alcançabilidade átraves da Fórmula de Potências</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="alcancability-matrix-warshall"/>
+                    <label for="alcancability-matrix-warshall">Matriz de Alcançabilidade átraves do Algoritmo de Warshall</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="visited-vertexes-depth-search"/>
+                    <label for="visited-vertexes-depth-search">Vétices visitados a partir da Busca em Profundidade</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="visited-vertexes-width-search"/>
+                    <label for="visited-vertexes-width-search">Vétices visitados a partir da Busca em Largura</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="vertexes-amount"/>
+                    <label for="vertexes-amount">Quantidade de Vértices</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="archs-amount"/>
+                    <label for="archs-amount">Quantidade de Arestas</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="how-many-come-in-out"/>
+                    <label for="how-many-come-in-out">Quantidade de Arestas que Saem e Chegam aos vértices</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="verify-and-get-route"/>
+                    <label for="verify-and-get-route">Caminho entre os vértices informados (Se existir)</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked id="complexity"/>
+                    <label for="complexity">Comparação da Complexidade</label>
+                </div>
+            </div>
+            <div id="input-button">
+                <button onCLick="readInputs()" id="button">Executar</button>
+            </div>
+        </div>
+        <div id="output-container">
+            <ul id="output-ul">
+                <li id="adjacency-matrix-output-label" class="output-label"></li>
+                <li id="adjacency-matrix-output" class="output-li"></li>
+
+                <li id="alcancability-matrix-power-output-label" class="output-label"></li>
+                <li id="alcancability-matrix-power-output" class="output-li"></li>
+
+                <li id="alcancability-matrix-warshall-output-label" class="output-label"></li>
+                <li id="alcancability-matrix-warshall-output" class="output-li"></li>
+
+                <li id="visited-vertexes-depth-search-output-label" class="output-label"></li>
+                <li id="visited-vertexes-depth-search-output" class="output-li"></li>
+
+                <li id="visited-vertexes-width-search-output-label" class="output-label"></li>
+                <li id="visited-vertexes-width-search-output" class="output-li"></li>
+
+                <li id="vertexes-amount-output-label" class="output-label"></li>
+                <li id="vertexes-amount-output" class="output-li"></li>
+
+                <li id="archs-amount-output-label" class="output-label"></li>
+                <li id="archs-amount-output" class="output-li"></li>
+
+                <li id="how-many-come-in-out-output-label" class="output-label"></li>
+                <li id="how-many-come-in-out-output" class="output-li"></li>
+
+                <li id="verify-and-get-route-output-label" class="output-label"></li>
+                <li id="verify-and-get-route-output" class="output-li"></li>
+
+                <li id="complexity-output-label" class="output-label"></li>
+                <li id="complexity-output" class="output-li"></li>
+
+            </ul>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>
