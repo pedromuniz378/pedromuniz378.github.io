@@ -169,12 +169,13 @@ function howManyComeIn(adjacencyMatrix, vertex) {
 }
 
 function getRoute(adjacencyList, reachabilityMatrix, vertex1, vertex2, ) {
-
-    if (reachabilityMatrix[vertex1 - 1][vertex2 - 1] == 1) {
-        return auxGetRoute(adjacencyList, vertex1, vertex2)
-    } else {
-        return false
-    }
+    if (vertex1 == vertex1 && vertex2 == vertex2) {
+        if (reachabilityMatrix[vertex1 - 1][vertex2 - 1] == 1) {
+            return auxGetRoute(adjacencyList, vertex1, vertex2)
+        } else {
+            return false
+        }
+    } else return null
 
 
 
@@ -214,144 +215,202 @@ function textAreaToObject(txt) {
 
 function printMatrix(matrix) {
     let txtMatrix = matrix.reduce((acc, curr) => {
-        // let row = curr.reduce((acc1, curr1) => `${acc1} ` + `${curr1}`, '')
         let row = '|' + curr.reduce((acc1, curr1) => `${acc1} ` + `${curr1}`, '') + ' |<br/>'
-        console.log(row)
-        console.log(`${acc}` + `${row}`)
         return `${acc} ` + `${row}`
     }, '')
     return txtMatrix
 
 }
-
-function readInputs() {
-    let adjacencyList = document.getElementById('adjacency-list').value
-    let vertexes = document.getElementById('vertexes').value.split(',')
-    let vertex1 = parseInt(vertexes[0])
-    let vertex2 = parseInt(vertexes[1])
-    adjacencyList = textAreaToObject(adjacencyList)
-
-    let matrix = getAdjacencyMatrix(adjacencyList)
-    let [reachabilityMatrixPower, operationsPower] = powerFormula(matrix)
-    let [reachabilityMatrixWarshall, operationsWarshall] = warshallAlgorithm(matrix)
-    let vertexesAmount = amountOfVertexes(matrix)
-
-    // Verifica se a Matriz de Adjacências foi marcada
-    let adjacency_matrix_output = document.getElementById("adjacency-matrix-output")
-    let adjacency_matrix_output_label = document.getElementById("adjacency-matrix-output-label")
-    if (document.getElementById("adjacency-matrix").checked) {
-        adjacency_matrix_output_label.innerHTML = "Matriz de Adjacências:"
-        adjacency_matrix_output.innerHTML = printMatrix(matrix)
+function onChange() {
+    if (document.getElementById("use-examples").checked) {
+        document.getElementById('example1').disabled = false
+        document.getElementById('example2').disabled = false
+        document.getElementById('example3').disabled = false
     } else {
-        adjacency_matrix_output.innerHTML = ""
-        adjacency_matrix_output_label.innerHTML = ""
+        document.getElementById('example1').disabled = true
+        document.getElementById('example2').disabled = true
+        document.getElementById('example3').disabled = true
+        document.getElementById('adjacency-list').value = ''
+        document.getElementById('vertexes').value = ''
     }
+}
+function onFocusRadio(example) {
+    let exampleAdjacecyLists = [ 
+        '1 -> 2 -> 3 -> 4 -> .\n2 -> 4 -> .\n3 -> 1 -> 2 -> .\n4 -> .',
+        '1 -> 2 -> 4 -> .\n2 -> 3 -> .\n3 -> .\n4 -> 3 -> 5 -> .\n5 -> .',
+        '1 -> 2 -> 3 -> .\n2 -> 4 -> 5 -> .\n3 -> 6 -> .\n4 -> 7 -> .\n5 -> 7 -> .\n6 -> 5 -> 7 -> .\n7 -> .'
+    ]
 
-    // Verifica se a Matriz de Alcançabilidade átraves da Fórmula de Potências foi marcada
-    let alcancability_matrix_power_output = document.getElementById("alcancability-matrix-power-output")
-    let alcancability_matrix_power_output_label = document.getElementById("alcancability-matrix-power-output-label")
-    if (document.getElementById("alcancability-matrix-power").checked) {
-        alcancability_matrix_power_output_label.innerHTML = "Matriz de Alcançabilidade átraves da Fórmula de Potências:"
-        alcancability_matrix_power_output.innerHTML = printMatrix(reachabilityMatrixPower)
-    } else {
-        alcancability_matrix_power_output.innerHTML = ""
-        alcancability_matrix_power_output_label.innerHTML = ""
-    }
+    let exampleVertexes = [
+        '1, 2',
+        '3, 1',
+        '1, 7'
+    ]
 
-    // Verifica se a Matriz de Alcançabilidade átraves do Algoritmo de Warshall foi marcada
-    let alcancability_matrix_warshall_output = document.getElementById("alcancability-matrix-warshall-output")
-    let alcancability_matrix_warshall_output_label = document.getElementById("alcancability-matrix-warshall-output-label")
-    if (document.getElementById("alcancability-matrix-warshall").checked) {
-        alcancability_matrix_warshall_output_label.innerHTML = "Matriz de Alcançabilidade átraves do Algoritmo de Warshall:"
-        alcancability_matrix_warshall_output.innerHTML = printMatrix(reachabilityMatrixWarshall)
-    } else {
-        alcancability_matrix_warshall_output.innerHTML = ""
-        alcancability_matrix_warshall_output_label.innerHTML = ""
-    }
-
-    // Verifica se Vétices visitados a partir da Busca em Profundidade foi marcada
-    let visited_vertexes_depth_search_output = document.getElementById("visited-vertexes-depth-search-output")
-    let visited_vertexes_depth_search_output_label = document.getElementById("visited-vertexes-depth-search-output-label")
-    if (document.getElementById("visited-vertexes-depth-search").checked) {
-        visited_vertexes_depth_search_output_label.innerHTML = "Vétices visitados a partir da Busca em Profundidade:"
-        visited_vertexes_depth_search_output.innerHTML = depthSearch(matrix, vertex1)
-    } else {
-        visited_vertexes_depth_search_output.innerHTML = ""
-        visited_vertexes_depth_search_output_label.innerHTML = ""
-    }
-
-    // Verifica se Vétices visitados a partir da Busca em Largura foi marcada
-    let visited_vertexes_width_search_output = document.getElementById("visited-vertexes-width-search-output")
-    let visited_vertexes_width_search_output_label = document.getElementById("visited-vertexes-width-search-output-label")
-    if (document.getElementById("visited-vertexes-width-search").checked) {
-        visited_vertexes_width_search_output_label.innerHTML = "Vétices visitados a partir da Busca em Largura:"
-        visited_vertexes_width_search_output.innerHTML = widthSearch(matrix, vertex1)
-    } else {
-        visited_vertexes_width_search_output.innerHTML = ""
-        visited_vertexes_width_search_output_label.innerHTML = ""
-    }
-    // Verifica se Quantidade de Vértices foi marcada
-    let vertexes_amount_output = document.getElementById("vertexes-amount-output")
-    let vertexes_amount_output_label = document.getElementById("vertexes-amount-output-label")
-    if (document.getElementById("vertexes-amount").checked) {
-        vertexes_amount_output_label.innerHTML = "Quantidade de Vértices:"
-        vertexes_amount_output.innerHTML = vertexesAmount
-    } else {
-        vertexes_amount_output.innerHTML = ""
-        vertexes_amount_output_label.innerHTML = ""
-    }
-
-    // Verifica se Quantidade de Arestas foi marcada
-    let archs_amount_output = document.getElementById("archs-amount-output")
-    let archs_amount_output_label = document.getElementById("archs-amount-output-label")
-    if (document.getElementById("archs-amount").checked) {
-        archs_amount_output_label.innerHTML = "Quantidade de Arestas:"
-        archs_amount_output.innerHTML = amountOfArchs(matrix)
-    } else {
-        archs_amount_output.innerHTML = ""
-        archs_amount_output_label.innerHTML = ""
-    }
-
-    // Verifica se Quantidade de Arestas que Saem e Chegam aos vértices foi marcada
-    let how_many_come_in_out_output = document.getElementById("how-many-come-in-out-output")
-    let how_many_come_in_out_output_label = document.getElementById("how-many-come-in-out-output-label")
-    if (document.getElementById("how-many-come-in-out").checked) {
-        how_many_come_in_out_output_label.innerHTML = "Quantidade de Arestas que Saem e Chegam aos vértices:"
-        how_many_come_in_out_output.innerHTML = `${howManyComeOut(matrix, vertex1)} Saem e ${howManyComeIn(matrix, vertex1)} Chegam`
-    } else {
-        how_many_come_in_out_output.innerHTML = ""
-        how_many_come_in_out_output_label.innerHTML = ""
-    }
-
-    // Verifica se Caminho entre os vértices informados (Se existir) foi marcada
-    let verify_and_get_route_output = document.getElementById("verify-and-get-route-output")
-    let verify_and_get_route_output_label = document.getElementById("verify-and-get-route-output-label")
-    if (document.getElementById("verify-and-get-route").checked) {
-        let route = getRoute(adjacencyList, reachabilityMatrixPower, vertex1, vertex2)
-        verify_and_get_route_output_label.innerHTML = "Caminho entre os vértices informados (Se existir):"
-        verify_and_get_route_output.innerHTML = !!route ? route : `Não existe um caminho de ${vertex1} até ${vertex2}`
-    } else {
-        verify_and_get_route_output.innerHTML = ""
-        verify_and_get_route_output_label.innerHTML = ""
-    }
-
-    // Verifica se Comparação da Complexidade foi marcada
-    let complexity_output = document.getElementById("complexity-output")
-    let complexity_output_label = document.getElementById("complexity-output-label")
-    if (document.getElementById("complexity").checked) {
-        let txtPower = `O total de operações através da Fórmula de Potências foi ${operationsPower}, enquanto na teoria seriam ${ 2 * ((vertexesAmount - 1) * vertexesAmount ** 3) + ((vertexesAmount - 1) * vertexesAmount ** 2)} operações.<br/>`
-        let txtWarshall = `O total de operações através do Algoritmo de Warshall foi ${operationsWarshall}, enquanto na teoria seriam ${2 * vertexesAmount ** 3} operações.`
-
-        complexity_output_label.innerHTML = "Comparação da Complexidade:"
-        complexity_output.innerHTML = txtPower + txtWarshall
-    } else {
-        complexity_output.innerHTML = ""
-        complexity_output_label.innerHTML = ""
-    }
+    document.getElementById('adjacency-list').value = exampleAdjacecyLists[example-1]
+    document.getElementById('vertexes').value = exampleVertexes[example-1]
 
 }
 
-readInputs()
+
+function readInputs() {
+
+    if (document.getElementById('adjacency-list').value == '') {
+        document.getElementById("error").innerHTML = "Erro! Você precisa inserir uma Lista de adjacencias no campo acima!."
+    } else if (!document.getElementById('adjacency-list').value.includes('->')) {
+        document.getElementById("error").innerHTML = "Erro! Lista de Ajdacências Invalida!."
+
+    } else {
+        document.getElementById("error").innerHTML = ""
+        let adjacencyList = document.getElementById('adjacency-list').value
+        let vertexes = document.getElementById('vertexes').value.split(',')
+        let vertex1 = parseInt(vertexes[0])
+        let vertex2 = parseInt(vertexes[1])
+        adjacencyList = textAreaToObject(adjacencyList)
+        
+        let matrix = getAdjacencyMatrix(adjacencyList)
+        let [reachabilityMatrixPower, operationsPower] = powerFormula(matrix)
+        let [reachabilityMatrixWarshall, operationsWarshall] = warshallAlgorithm(matrix)
+        let vertexesAmount = amountOfVertexes(matrix)
+
+        // Verifica se a Matriz de Adjacências foi marcada
+        let adjacency_matrix_output = document.getElementById("adjacency-matrix-output")
+        let adjacency_matrix_output_label = document.getElementById("adjacency-matrix-output-label")
+        if (document.getElementById("adjacency-matrix").checked) {
+            adjacency_matrix_output_label.innerHTML = "Matriz de Adjacências:"
+            adjacency_matrix_output.innerHTML = printMatrix(matrix)
+        } else {
+            adjacency_matrix_output.innerHTML = ""
+            adjacency_matrix_output_label.innerHTML = ""
+        }
+
+        // Verifica se a Matriz de Alcançabilidade átraves da Fórmula de Potências foi marcada
+        let alcancability_matrix_power_output = document.getElementById("alcancability-matrix-power-output")
+        let alcancability_matrix_power_output_label = document.getElementById("alcancability-matrix-power-output-label")
+        if (document.getElementById("alcancability-matrix-power").checked) {
+            alcancability_matrix_power_output_label.innerHTML = "Matriz de Alcançabilidade átraves da Fórmula de Potências:"
+            alcancability_matrix_power_output.innerHTML = printMatrix(reachabilityMatrixPower)
+        } else {
+            alcancability_matrix_power_output.innerHTML = ""
+            alcancability_matrix_power_output_label.innerHTML = ""
+        }
+
+        // Verifica se a Matriz de Alcançabilidade átraves do Algoritmo de Warshall foi marcada
+        let alcancability_matrix_warshall_output = document.getElementById("alcancability-matrix-warshall-output")
+        let alcancability_matrix_warshall_output_label = document.getElementById("alcancability-matrix-warshall-output-label")
+        if (document.getElementById("alcancability-matrix-warshall").checked) {
+            alcancability_matrix_warshall_output_label.innerHTML = "Matriz de Alcançabilidade átraves do Algoritmo de Warshall:"
+            alcancability_matrix_warshall_output.innerHTML = printMatrix(reachabilityMatrixWarshall)
+        } else {
+            alcancability_matrix_warshall_output.innerHTML = ""
+            alcancability_matrix_warshall_output_label.innerHTML = ""
+        }
+
+        // Verifica se Vétices visitados a partir da Busca em Profundidade foi marcada
+        let visited_vertexes_depth_search_output = document.getElementById("visited-vertexes-depth-search-output")
+        let visited_vertexes_depth_search_output_label = document.getElementById("visited-vertexes-depth-search-output-label")
+        if (document.getElementById("visited-vertexes-depth-search").checked) {
+            visited_vertexes_depth_search_output_label.innerHTML = "Vétices visitados a partir da Busca em Profundidade:"
+            if (document.getElementById('vertexes').value == '') {
+                visited_vertexes_depth_search_output.innerHTML = `Para visualizar esta resposta você precisa inserir pelo menos um vértice no campo acima.`
+            }else {
+                visited_vertexes_depth_search_output.innerHTML = `Os Vértices visitados foram: ${depthSearch(matrix, vertex1).reduce((acc, curr) => `${acc}, `+ `${curr}`)}.`
+            }
+        } else {
+            visited_vertexes_depth_search_output.innerHTML = ""
+            visited_vertexes_depth_search_output_label.innerHTML = ""
+        }
+
+        // Verifica se Vétices visitados a partir da Busca em Largura foi marcada
+        let visited_vertexes_width_search_output = document.getElementById("visited-vertexes-width-search-output")
+        let visited_vertexes_width_search_output_label = document.getElementById("visited-vertexes-width-search-output-label")
+        if (document.getElementById("visited-vertexes-width-search").checked) {
+            visited_vertexes_width_search_output_label.innerHTML = "Vétices visitados a partir da Busca em Largura:"
+            if (document.getElementById('vertexes').value == '') {
+                visited_vertexes_width_search_output.innerHTML = `Para visualizar esta resposta você precisa inserir pelo menos um vértice no campo acima.`
+            }else {
+                visited_vertexes_width_search_output.innerHTML = `Os Vértices visitados foram: ${widthSearch(matrix, vertex1).reduce((acc, curr) => `${acc}, `+ `${curr}`)}.`
+            }
+        } else {
+            visited_vertexes_width_search_output.innerHTML = ""
+            visited_vertexes_width_search_output_label.innerHTML = ""
+        }
+        // Verifica se Quantidade de Vértices foi marcada
+        let vertexes_amount_output = document.getElementById("vertexes-amount-output")
+        let vertexes_amount_output_label = document.getElementById("vertexes-amount-output-label")
+        if (document.getElementById("vertexes-amount").checked) {
+            vertexes_amount_output_label.innerHTML = "Quantidade de Vértices:"
+            vertexes_amount_output.innerHTML = `Este Grafo possui ${vertexesAmount} Vértice${vertexesAmount == 1 ? '' : 's'}.`
+        } else {
+            vertexes_amount_output.innerHTML = ""
+            vertexes_amount_output_label.innerHTML = ""
+        }
+
+        // Verifica se Quantidade de Arestas foi marcada
+        let archs_amount_output = document.getElementById("archs-amount-output")
+        let archs_amount_output_label = document.getElementById("archs-amount-output-label")
+        if (document.getElementById("archs-amount").checked) {
+            let archsAmount = amountOfArchs(matrix)
+            archs_amount_output_label.innerHTML = "Quantidade de Arestas:"
+            archs_amount_output.innerHTML = `Este Grafo possui ${archsAmount} Aresta${archsAmount == 1 ? '' : 's'}.`
+        } else {
+            archs_amount_output.innerHTML = ""
+            archs_amount_output_label.innerHTML = ""
+        }
+
+        // Verifica se Quantidade de Arestas que Saem e Chegam aos vértices foi marcada
+        let how_many_come_in_out_output = document.getElementById("how-many-come-in-out-output")
+        let how_many_come_in_out_output_label = document.getElementById("how-many-come-in-out-output-label")
+        if (document.getElementById("how-many-come-in-out").checked) {
+            how_many_come_in_out_output_label.innerHTML = "Quantidade de Arestas que Saem e Chegam aos vértices:"
+            if (document.getElementById('vertexes').value == '') {
+                how_many_come_in_out_output.innerHTML = `Para visualizar esta resposta você precisa inserir pelo menos um vértice no campo acima.`
+            }else {
+                let comingOut = howManyComeOut(matrix, vertex1)
+                let comingIn = howManyComeIn(matrix, vertex1)
+                how_many_come_in_out_output.innerHTML = `Para  o vértice ${vertex1}, ${comingOut} aresta${comingOut == 1 ? '' : 's'} ${comingOut == 1 ? 'sai' : 'saem'} e ${comingIn} aresta${comingIn == 1 ? '' : 's'} ${comingIn == 1 ? 'chega' : 'chegam'}.`
+            }
+        } else {
+            how_many_come_in_out_output.innerHTML = ""
+            how_many_come_in_out_output_label.innerHTML = ""
+        }
+
+        // Verifica se Caminho entre os vértices informados (Se existir) foi marcada
+        let verify_and_get_route_output = document.getElementById("verify-and-get-route-output")
+        let verify_and_get_route_output_label = document.getElementById("verify-and-get-route-output-label")
+        if (document.getElementById("verify-and-get-route").checked) {
+            let route = getRoute(adjacencyList, reachabilityMatrixPower, vertex1, vertex2)
+            verify_and_get_route_output_label.innerHTML = "Caminho entre os vértices informados:"
+            if (route == null) {
+                verify_and_get_route_output.innerHTML = `Apenas um vértice foi informado!`
+            } else if (!!route) {
+                verify_and_get_route_output.innerHTML = `O Caminho do vértice ${vertex1} até o vértice ${vertex2} é: ${route.reduce((acc, curr) => `${acc} -> `+ `${curr}`)}.`
+            }else {
+                verify_and_get_route_output.innerHTML = `Não existe caminho desde o vértice ${vertex1} até o vértice ${vertex2}.`
+            }
+        } else {
+            verify_and_get_route_output.innerHTML = ""
+            verify_and_get_route_output_label.innerHTML = ""
+        }
+
+        // Verifica se Comparação da Complexidade foi marcada
+        let complexity_output = document.getElementById("complexity-output")
+        let complexity_output_label = document.getElementById("complexity-output-label")
+        if (document.getElementById("complexity").checked) {
+            let txtPower = `O total de operações através da Fórmula de Potências foi ${operationsPower}, enquanto na teoria seriam ${ 2 * ((vertexesAmount - 1) * vertexesAmount ** 3) + ((vertexesAmount - 1) * vertexesAmount ** 2)} operações.<br/>`
+            let txtWarshall = `O total de operações através do Algoritmo de Warshall foi ${operationsWarshall}, enquanto na teoria seriam ${2 * vertexesAmount ** 3} operações.`
+
+            complexity_output_label.innerHTML = "Comparação da Complexidade (Operações E/OU):"
+            complexity_output.innerHTML = txtPower + txtWarshall
+        } else {
+            complexity_output.innerHTML = ""
+            complexity_output_label.innerHTML = ""
+        }
+
+    }
+}
+
+// readInputs()
 
 // let adjacencyList = {
 //     1: [2],

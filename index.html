@@ -4,18 +4,38 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
 </head>
-<body>
+<body >
     <div id="container">
+        <h1>P2 - Parte Prática - Matemática Discreta 2</h1>
+        <!-- ------------------------------------ COLOCA O MANUAL AQUI -------------------------------------------------- -->
         <div id="input-container" >
+            <div id="examples-container">
+                
+                <h2>Exemplos disponiveis:</h2>
+                <ul id="examples-ul">
+                    <li id="examples-li">
+                        <input type="checkbox" id="use-examples" onchange="onChange()"/>
+                        <label for="use-examples">Usar Exemplos</label>
+                    </li>
+                    <li id="examples-li">
+                        <input type="radio" name="examples" id="example1" disabled onfocus="onFocusRadio(1)" />
+                        <label for="example1">Exemplo 1</label>
+                    </li>
+                    <li id="examples-li">
+                        <input type="radio" name="examples" id="example2" disabled onfocus="onFocusRadio(2)" />
+                        <label for="example2">Exemplo 2</label>
+                    </li>
+                    <li id="examples-li">
+                        <input type="radio" name="examples" id="example3" disabled onfocus="onFocusRadio(3)" />
+                        <label for="example3">Exemplo 3</label>
+                    </li>
+                </ul>
+    
+            </div>
             <label for="adjacency-list" id="label" >Lista de adjacencias:</label>
-            <textarea id="adjacency-list" placeholder="Digite aqui a lista de adjacencias..." rows="10" cols="50">
-1 -> 2 -> 3 -> 4 -> .
-2 -> 4 -> .
-3 -> 1 -> 2 -> .
-4 -> .
-            </textarea>
-            <label for="vertexes" id="label" >Lista de adjacencias:</label>
-            <input id="vertexes" type="text" placeholder="Digite aqui um ou dois vértices..." size="50" value="1, 2" />
+            <textarea id="adjacency-list" placeholder="Digite aqui uma lista de adjacencias..." rows="10" cols="50"></textarea>
+            <label for="vertexes" id="label" >Vértice(s):</label>
+            <input id="vertexes" type="text" placeholder="Digite aqui um ou dois vértices..." size="50" value="" />
             <div id="selection-container">
                 <div>
                     <input type="checkbox" checked id="adjacency-matrix"/>
@@ -31,11 +51,11 @@
                 </div>
                 <div>
                     <input type="checkbox" checked id="visited-vertexes-depth-search"/>
-                    <label for="visited-vertexes-depth-search">Vétices visitados a partir da Busca em Profundidade</label>
+                    <label for="visited-vertexes-depth-search">Vértices visitados a partir da Busca em Profundidade</label>
                 </div>
                 <div>
                     <input type="checkbox" checked id="visited-vertexes-width-search"/>
-                    <label for="visited-vertexes-width-search">Vétices visitados a partir da Busca em Largura</label>
+                    <label for="visited-vertexes-width-search">Vértices visitados a partir da Busca em Largura</label>
                 </div>
                 <div>
                     <input type="checkbox" checked id="vertexes-amount"/>
@@ -55,15 +75,19 @@
                 </div>
                 <div>
                     <input type="checkbox" checked id="complexity"/>
-                    <label for="complexity">Comparação da Complexidade</label>
+                    <label for="complexity">Comparação da Complexidade (Operações E/OU)</label>
                 </div>
             </div>
             <div id="input-button">
                 <button onCLick="readInputs()" id="button">Executar</button>
             </div>
         </div>
+        <span id="separator"></span>
         <div id="output-container">
             <ul id="output-ul">
+                <li id="error"></li>
+
+                
                 <li id="adjacency-matrix-output-label" class="output-label"></li>
                 <li id="adjacency-matrix-output" class="output-li"></li>
 
