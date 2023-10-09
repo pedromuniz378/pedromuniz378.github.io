@@ -8,6 +8,7 @@ function getParams() {
     } else {
         code.textContent = 'Sem informações!';
     }
+    
     var state = document.getElementById("state");
     if (params.get('state') != null) {
         state.textContent = params.get('state');
