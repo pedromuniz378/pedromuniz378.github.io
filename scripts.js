@@ -1,11 +1,18 @@
 
 function getParams() {
     let params = new URLSearchParams(location.search);
-    var paragraph = document.getElementById("p");
+    console.log(params)
+    var code = document.getElementById("code");
     if (params.get('code') != null) {
-        paragraph.textContent = params.get('code');
+        code.textContent = params.get('code');
     } else {
-        paragraph.textContent = 'Sem informações!';
+        code.textContent = 'Sem informações!';
+    }
+    var state = document.getElementById("state");
+    if (params.get('state') != null) {
+        state.textContent = params.get('state');
+    } else {
+        state.textContent = 'Sem informações!';
     }
 }
 
