@@ -61,8 +61,8 @@
       -webkit-text-fill-color: transparent;
       text-shadow: 0 0 20px rgba(106,13,173,0.6);
       white-space: nowrap;
-      font-size: clamp(24px, 8vw, 100px);
-      max-width: 95%;
+      font-size: calc(100vh / 8); /* ajusta o tamanho para caber verticalmente */
+      max-width: 90%;
       overflow: hidden;
       animation: pulse 2s infinite;
       pointer-events:none;
@@ -91,7 +91,6 @@
     <div class="slide" data-index="8"><img src="img/9.jpg" alt="Foto 9"></div>
 
     <div class="overlay">Namora comigo?</div>
-
   </main>
 
   <script>
