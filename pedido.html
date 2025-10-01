@@ -1,89 +1,81 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Carrossel 3x4 — Olá, mundo!</title>
+  <title>Namora comigo?</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;}
 
-    html,
-    body {
-      height: 100%;
-    }
-
-    .carousel {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .carousel{
+      position:relative;
+      width:100%;
+      height:100vh;
+      overflow:hidden;
+      background:#000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       touch-action: pan-y;
-      /* permite swipe horizontal em dispositivos móveis */
     }
 
-    .slide {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 400ms ease-in-out;
-      pointer-events: none;
+    .slide{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      transition:opacity 1200ms ease-in-out;
+      pointer-events:none;
     }
+    .slide.visible{opacity:1;pointer-events:auto}
 
-    .slide.visible {
-      opacity: 1;
-      pointer-events: auto
-    }
-
-    .slide img {
-      height: 100vh;
-      width: auto;
-      max-width: 100vw;
-      display: block;
-      object-fit: cover;
+    .slide img{
+      height:100vh;
+      width:auto;
+      max-width:100vw;
+      display:block;
+      object-fit:cover;
       -webkit-user-drag: none;
       user-select: none;
+      transform: scale(1);
+      transition: transform 3s ease-in-out;
+    }
+    .slide.visible img{
+      transform: scale(1.08); /* zoom suave */
     }
 
-    .overlay {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 5;
-      text-align: center;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    .overlay{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      z-index:5;
+      text-align:center;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       font-size: clamp(28px, 6vw, 56px);
-      color: white;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-      pointer-events: none;
-      /* importante para que gestos passem pelo overlay */
+      font-weight: bold;
+      background: linear-gradient(90deg, #4da6ff, #a64dff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(100,0,255,0.5);
+      animation: pulse 2s infinite;
+      pointer-events:none;
     }
 
-    @media (max-width:420px) {
-      .overlay {
-        font-size: 32px;
-      }
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%,-50%) scale(1); }
+      50% { transform: translate(-50%,-50%) scale(1.08); }
     }
   </style>
 </head>
-
 <body>
 
   <main class="carousel" aria-roledescription="carousel">
 
-    <!-- 9 slides (use img/1.jpg ... img/9.jpg) -->
+    <!-- 9 slides -->
     <div class="slide visible" data-index="0"><img src="img/1.jpg" alt="Foto 1"></div>
     <div class="slide" data-index="1"><img src="img/2.jpg" alt="Foto 2"></div>
     <div class="slide" data-index="2"><img src="img/3.jpg" alt="Foto 3"></div>
@@ -94,74 +86,64 @@
     <div class="slide" data-index="7"><img src="img/8.jpg" alt="Foto 8"></div>
     <div class="slide" data-index="8"><img src="img/9.jpg" alt="Foto 9"></div>
 
-    <div class="overlay">Olá, mundo!</div>
+    <div class="overlay">Namora comigo?</div>
 
   </main>
 
   <script>
-    (function () {
+    (function(){
       const slides = Array.from(document.querySelectorAll('.slide'));
-      const INTERVAL_MS = 3000; // 3 segundos por slide (autoplay)
+      const INTERVAL_MS = 3000;
       let current = 0;
       let timer = null;
 
-      function show(i) {
-        slides.forEach((s, idx) => s.classList.toggle('visible', idx === i));
+      function show(i){
+        slides.forEach((s,idx)=> s.classList.toggle('visible', idx===i));
         current = i;
       }
 
-      function next() { show((current + 1) % slides.length); }
-      function prev() { show((current - 1 + slides.length) % slides.length); }
+      function next(){ show((current + 1) % slides.length); }
+      function prev(){ show((current - 1 + slides.length) % slides.length); }
 
-      function startTimer() { if (timer) return; timer = setInterval(next, INTERVAL_MS); }
-      function stopTimer() { if (!timer) return; clearInterval(timer); timer = null; }
-      function resetTimer() { stopTimer(); startTimer(); }
+      function startTimer(){ if(timer) return; timer = setInterval(next, INTERVAL_MS); }
+      function stopTimer(){ if(!timer) return; clearInterval(timer); timer = null; }
+      function resetTimer(){ stopTimer(); startTimer(); }
 
       const carousel = document.querySelector('.carousel');
 
-      // pause on hover (desktop) — em mobile não aciona
-      carousel.addEventListener('mouseenter', stopTimer);
-      carousel.addEventListener('mouseleave', startTimer);
-
-      // suporte a swipe no celular (touch)
       let startX = 0;
       let startY = 0;
-      carousel.addEventListener('touchstart', (e) => {
+      carousel.addEventListener('touchstart', (e)=>{
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         stopTimer();
-      }, { passive: true });
+      }, {passive: true});
 
-      carousel.addEventListener('touchend', (e) => {
+      carousel.addEventListener('touchend', (e)=>{
         const endX = e.changedTouches[0].clientX;
         const endY = e.changedTouches[0].clientY;
         const diffX = endX - startX;
         const diffY = endY - startY;
-        // ignora scroll vertical: exige movimento horizontal predominante
-        if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-          if (diffX > 0) prev(); else next();
+        if(Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)){
+          if(diffX > 0) prev(); else next();
         }
         resetTimer();
       });
 
-      // pré-carrega imagens
-      slides.forEach(s => {
+      slides.forEach(s=>{
         const img = s.querySelector('img');
-        if (img && !img.complete) { const tmp = new Image(); tmp.src = img.src; }
+        if(img && !img.complete){ const tmp = new Image(); tmp.src = img.src; }
       });
 
-      // inicializa autoplay
       show(0);
       startTimer();
 
-      // suporte a teclado (opcional)
-      window.addEventListener('keydown', (ev) => {
-        if (ev.key === 'ArrowRight') { next(); resetTimer(); }
-        if (ev.key === 'ArrowLeft') { prev(); resetTimer(); }
+      window.addEventListener('keydown', (ev)=>{
+        if(ev.key === 'ArrowRight') { next(); resetTimer(); }
+        if(ev.key === 'ArrowLeft') { prev(); resetTimer(); }
       });
 
     })();
   </script>
 </body>
-
 </html>
