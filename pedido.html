@@ -17,6 +17,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      touch-action: pan-y; /* permite swipe horizontal em dispositivos móveis */
     }
 
     .slide{
@@ -49,40 +50,14 @@
       z-index:5;
       text-align:center;
       font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      font-size:clamp(20px, 4vw, 48px);
+      font-size:clamp(28px, 6vw, 56px);
       color:white;
       text-shadow:0 2px 10px rgba(0,0,0,0.6);
-      pointer-events:none;
+      pointer-events:none; /* importante para que gestos passem pelo overlay */
     }
-
-    .nav{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:1rem;
-      z-index:6;
-      pointer-events:none;
-    }
-    .nav button{
-      pointer-events:auto;
-      background:rgba(0,0,0,0.35);
-      border:0;padding:10px 12px;border-radius:8px;color:white;cursor:pointer;font-size:18px;
-    }
-
-    .dots{
-      position:absolute;
-      left:50%;
-      bottom:18px;
-      transform:translateX(-50%);
-      display:flex;gap:8px;z-index:6;
-    }
-    .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.35);cursor:pointer}
-    .dot.active{background:white}
 
     @media (max-width:420px){
-      .overlay{font-size:18px}
+      .overlay{font-size:10%}
     }
   </style>
 </head>
@@ -90,7 +65,7 @@
 
   <main class="carousel" aria-roledescription="carousel">
 
-    <!-- 9 slides -->
+    <!-- 9 slides (use img/1.jpg ... img/9.jpg) -->
     <div class="slide visible" data-index="0"><img src="img/1.jpg" alt="Foto 1"></div>
     <div class="slide" data-index="1"><img src="img/2.jpg" alt="Foto 2"></div>
     <div class="slide" data-index="2"><img src="img/3.jpg" alt="Foto 3"></div>
@@ -101,79 +76,67 @@
     <div class="slide" data-index="7"><img src="img/8.jpg" alt="Foto 8"></div>
     <div class="slide" data-index="8"><img src="img/9.jpg" alt="Foto 9"></div>
 
-    <div class="overlay">Namora comigo?</div>
+    <div class="overlay">Olá, mundo!</div>
 
-    <div class="nav">
-      <button id="prev" aria-label="Anterior">‹</button>
-      <button id="next" aria-label="Próximo">›</button>
-    </div>
-
-    <div class="dots" id="dots"></div>
   </main>
 
   <script>
     (function(){
       const slides = Array.from(document.querySelectorAll('.slide'));
-      const dotsContainer = document.getElementById('dots');
-      const INTERVAL_MS = 3000; // 3 segundos
+      const INTERVAL_MS = 3000; // 3 segundos por slide (autoplay)
       let current = 0;
       let timer = null;
 
-      slides.forEach((s,i)=>{
-        const d = document.createElement('div');
-        d.className = 'dot' + (i===0? ' active':'');
-        d.dataset.index = i;
-        d.addEventListener('click', ()=>{gotoIndex(i); resetTimer();});
-        dotsContainer.appendChild(d);
-      });
-
       function show(i){
-        slides.forEach((s,idx)=>{
-          s.classList.toggle('visible', idx===i);
-        });
-        document.querySelectorAll('.dot').forEach((d,idx)=>{
-          d.classList.toggle('active', idx===i);
-        });
+        slides.forEach((s,idx)=> s.classList.toggle('visible', idx===i));
         current = i;
       }
 
       function next(){ show((current + 1) % slides.length); }
       function prev(){ show((current - 1 + slides.length) % slides.length); }
-      function gotoIndex(i){ show(i); }
-
-      document.getElementById('next').addEventListener('click', ()=>{ next(); resetTimer(); });
-      document.getElementById('prev').addEventListener('click', ()=>{ prev(); resetTimer(); });
 
       function startTimer(){ if(timer) return; timer = setInterval(next, INTERVAL_MS); }
       function stopTimer(){ if(!timer) return; clearInterval(timer); timer = null; }
       function resetTimer(){ stopTimer(); startTimer(); }
 
       const carousel = document.querySelector('.carousel');
+
+      // pause on hover (desktop) — em mobile não aciona
       carousel.addEventListener('mouseenter', stopTimer);
       carousel.addEventListener('mouseleave', startTimer);
 
-      // suporte a swipe no celular
+      // suporte a swipe no celular (touch)
       let startX = 0;
+      let startY = 0;
       carousel.addEventListener('touchstart', (e)=>{
         startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
         stopTimer();
-      });
+      }, {passive: true});
+
       carousel.addEventListener('touchend', (e)=>{
-        const diff = e.changedTouches[0].clientX - startX;
-        if(Math.abs(diff) > 50){
-          if(diff > 0) prev(); else next();
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const diffX = endX - startX;
+        const diffY = endY - startY;
+        // ignora scroll vertical: exige movimento horizontal predominante
+        if(Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)){
+          if(diffX > 0) prev(); else next();
         }
         resetTimer();
       });
 
+      // pré-carrega imagens
       slides.forEach(s=>{
         const img = s.querySelector('img');
         if(img && !img.complete){ const tmp = new Image(); tmp.src = img.src; }
       });
 
+      // inicializa autoplay
       show(0);
       startTimer();
 
+      // suporte a teclado (opcional)
       window.addEventListener('keydown', (ev)=>{
         if(ev.key === 'ArrowRight') { next(); resetTimer(); }
         if(ev.key === 'ArrowLeft') { prev(); resetTimer(); }
