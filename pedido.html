@@ -61,18 +61,12 @@
       -webkit-text-fill-color: transparent;
       text-shadow: 0 0 20px rgba(106,13,173,0.6);
       white-space: nowrap;
-      font-size: calc(100vh / 5); /* tamanho máximo dentro da altura da tela */
+      font-size: clamp(24px, 8vw, 100px);
       max-width: 95%;
       overflow: hidden;
       animation: pulse 2s infinite;
       pointer-events:none;
       display: inline-block;
-    }
-
-    @media (max-width: 1000px) {
-      .overlay {
-        font-size: calc(90vw / 9);
-      }
     }
 
     @keyframes pulse {
