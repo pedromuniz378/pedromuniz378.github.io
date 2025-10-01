@@ -60,13 +60,11 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: 0 0 20px rgba(106,13,173,0.6);
-      white-space: nowrap;
-      font-size: calc(100vh / 8); /* ajusta o tamanho para caber verticalmente */
-      max-width: 90%;
-      overflow: hidden;
+      white-space: nowrap; /* força tudo em uma linha */
+      font-size: 10vw; /* tamanho máximo baseado na largura da tela */
+      max-width: 95%; /* evita ultrapassar as bordas */
       animation: pulse 2s infinite;
       pointer-events:none;
-      display: inline-block;
     }
 
     @keyframes pulse {
@@ -91,6 +89,7 @@
     <div class="slide" data-index="8"><img src="img/9.jpg" alt="Foto 9"></div>
 
     <div class="overlay">Namora comigo?</div>
+
   </main>
 
   <script>
